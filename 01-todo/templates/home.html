@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - TODO App{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 3rem 0;">
+    <h1 style="font-size: 3rem; color: #2c3e50; margin-bottom: 1rem;">
+        Welcome to TODO App! 🎯
+    </h1>
+    
+    <p style="font-size: 1.3rem; color: #7f8c8d; margin-bottom: 2rem;">
+        Organize your tasks efficiently and boost your productivity
+    </p>
+    
+    {% if user.is_authenticated %}
+        <div style="background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 600px; margin: 2rem auto;">
+            <h2 style="color: #2c3e50; margin-bottom: 1.5rem;">Quick Actions</h2>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="{% url 'todo_list' %}" class="btn btn-primary" style="margin: 0.5rem;">
+                    📋 View My TODOs
+                </a>
+                <a href="{% url 'todo_create' %}" class="btn btn-success" style="margin: 0.5rem;">
+                    ➕ Create New TODO
+                </a>
+                <a href="{% url 'todo_stats' %}" class="btn btn-primary" style="margin: 0.5rem;">
+                    📊 View Statistics
+                </a>
+            </div>
+        </div>
+        
+        <div style="margin-top: 3rem; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">Features:</h3>
+            <ul style="list-style-position: inside; color: #7f8c8d; font-size: 1.1rem;">
+                <li>✅ Create, update, and delete TODO items</li>
+                <li>🎯 Set priorities (Low, Medium, High)</li>
+                <li>📅 Track due dates</li>
+                <li>📈 Monitor task status (Pending, In Progress, Completed)</li>
+                <li>📊 View your productivity statistics</li>
+                <li>🔐 Secure user authentication</li>
+            </ul>
+        </div>
+    {% else %}
+        <div style="background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 600px; margin: 2rem auto;">
+            <h2 style="color: #2c3e50; margin-bottom: 1.5rem;">Get Started</h2>
+            <p style="color: #7f8c8d; margin-bottom: 1.5rem;">
+                Please log in to start managing your TODO items
+            </p>
+            <a href="{% url 'login' %}" class="btn btn-primary">
+                🔐 Login
+            </a>
+        </div>
+        
+        <div style="margin-top: 3rem; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;">
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">Why use TODO App?</h3>
+            <ul style="list-style-position: inside; color: #7f8c8d; font-size: 1.1rem;">
+                <li>📝 Simple and intuitive interface</li>
+                <li>⚡ Fast and responsive</li>
+                <li>🔒 Your data is secure</li>
+                <li>📱 Works on all devices</li>
+                <li>🎨 Clean and modern design</li>
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} TODO{% endblock %}
+
+{% block content %}
+<h2>{{ action }} TODO</h2>
+
+<form method="post" style="background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 1rem; max-width: 600px;">
+    {% csrf_token %}
+    
+    <div style="margin-bottom: 1rem;">
+        <label for="title" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Title *</label>
+        <input type="text" id="title" name="title" value="{{ todo.title|default:'' }}" required 
+               style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+    </div>
+    
+    <div style="margin-bottom: 1rem;">
+        <label for="description" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Description</label>
+        <textarea id="description" name="description" rows="4" 
+                  style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">{{ todo.description|default:'' }}</textarea>
+    </div>
+    
+    {% if todo %}
+    <div style="margin-bottom: 1rem;">
+        <label for="status" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Status</label>
+        <select id="status" name="status" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+            <option value="pending" {% if todo.status == 'pending' %}selected{% endif %}>Pending</option>
+            <option value="in_progress" {% if todo.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+            <option value="completed" {% if todo.status == 'completed' %}selected{% endif %}>Completed</option>
+        </select>
+    </div>
+    {% endif %}
+    
+    <div style="margin-bottom: 1rem;">
+        <label for="priority" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Priority</label>
+        <select id="priority" name="priority" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+            <option value="low" {% if todo.priority == 'low' %}selected{% endif %}>Low</option>
+            <option value="medium" {% if todo.priority == 'medium' or not todo %}selected{% endif %}>Medium</option>
+            <option value="high" {% if todo.priority == 'high' %}selected{% endif %}>High</option>
+        </select>
+    </div>
+    
+    <div style="margin-bottom: 1rem;">
+        <label for="due_date" style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Due Date</label>
+        <input type="datetime-local" id="due_date" name="due_date" 
+               value="{% if todo.due_date %}{{ todo.due_date|date:'Y-m-d\TH:i' }}{% endif %}"
+               style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px;">
+    </div>
+    
+    <div style="margin-top: 1.5rem;">
+        <button type="submit" class="btn btn-success">{{ action }} TODO</button>
+        <a href="{% url 'todo_list' %}" class="btn btn-primary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

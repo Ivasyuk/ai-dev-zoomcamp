@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}My TODOs{% endblock %}
+
+{% block content %}
+<h2>My TODO List</h2>
+
+<div style="margin: 1rem 0;">
+    <a href="{% url 'todo_create' %}" class="btn btn-success">➕ Create New TODO</a>
+</div>
+
+<div style="margin: 1rem 0;">
+    <strong>Filter:</strong>
+    <a href="{% url 'todo_list' %}">All</a> |
+    <a href="?status=pending">Pending</a> |
+    <a href="?status=in_progress">In Progress</a> |
+    <a href="?status=completed">Completed</a>
+</div>
+
+{% if todos %}
+    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+        <thead>
+            <tr style="background-color: #34495e; color: white;">
+                <th style="padding: 0.8rem; text-align: left;">Title</th>
+                <th style="padding: 0.8rem; text-align: left;">Status</th>
+                <th style="padding: 0.8rem; text-align: left;">Priority</th>
+                <th style="padding: 0.8rem; text-align: left;">Due Date</th>
+                <th style="padding: 0.8rem; text-align: left;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for todo in todos %}
+            <tr style="border-bottom: 1px solid #ddd; background-color: white;">
+                <td style="padding: 0.8rem;">
+                    <a href="{% url 'todo_detail' todo.pk %}" style="color: #3498db; text-decoration: none;">
+                        {{ todo.title }}
+                    </a>
+                </td>
+                <td style="padding: 0.8rem;">{{ todo.get_status_display }}</td>
+                <td style="padding: 0.8rem;">{{ todo.get_priority_display }}</td>
+                <td style="padding: 0.8rem;">
+                    {% if todo.due_date %}
+                        {{ todo.due_date|date:"Y-m-d H:i" }}
+                        {% if todo.is_overdue %}
+                            <span style="color: red;">⚠️ Overdue</span>
+                        {% endif %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td style="padding: 0.8rem;">
+                    <a href="{% url 'todo_update' todo.pk %}" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.9rem;">Edit</a>
+                    {% if todo.status != 'completed' %}
+                        <a href="{% url 'todo_complete' todo.pk %}" class="btn btn-success" style="padding: 0.3rem 0.6rem; font-size: 0.9rem;">✓</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p style="margin-top: 1rem;">No TODOs found. <a href="{% url 'todo_create' %}">Create one!</a></p>
+{% endif %}
+{% endblock %}

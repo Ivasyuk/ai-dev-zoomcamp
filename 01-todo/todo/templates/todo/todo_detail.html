@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ todo.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ todo.title }}</h2>
+
+<div style="background-color: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-top: 1rem;">
+    <p><strong>Status:</strong> {{ todo.get_status_display }}</p>
+    <p><strong>Priority:</strong> {{ todo.get_priority_display }}</p>
+    <p><strong>Description:</strong></p>
+    <p style="margin-left: 1rem;">{{ todo.description|default:"No description provided." }}</p>
+    
+    {% if todo.due_date %}
+        <p><strong>Due Date:</strong> {{ todo.due_date|date:"Y-m-d H:i" }}
+            {% if todo.is_overdue %}
+                <span style="color: red;">⚠️ Overdue</span>
+            {% endif %}
+        </p>
+    {% endif %}
+    
+    <p><strong>Created:</strong> {{ todo.created_at|date:"Y-m-d H:i" }}</p>
+    <p><strong>Last Updated:</strong> {{ todo.updated_at|date:"Y-m-d H:i" }}</p>
+    
+    {% if todo.completed_at %}
+        <p><strong>Completed:</strong> {{ todo.completed_at|date:"Y-m-d H:i" }}</p>
+    {% endif %}
+</div>
+
+<div style="margin-top: 1.5rem;">
+    <a href="{% url 'todo_list' %}" class="btn btn-primary">← Back to List</a>
+    <a href="{% url 'todo_update' todo.pk %}" class="btn btn-primary">Edit</a>
+    {% if todo.status != 'completed' %}
+        <a href="{% url 'todo_complete' todo.pk %}" class="btn btn-success">Mark as Completed</a>
+    {% endif %}
+    <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-danger">Delete</a>
+</div>
+{% endblock %}
